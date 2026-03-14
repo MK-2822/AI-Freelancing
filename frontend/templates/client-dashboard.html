@@ -2,108 +2,249 @@
 {% block title %}Client Command Center{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-12 gap-6">
+<div class="grid grid-cols-12 gap-10">
     
-    <!-- LEFT: AI PROJECT DRAFTER (Command Input) -->
-    <div class="col-span-12 lg:col-span-4 space-y-6">
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-            <div class="flex items-center space-x-3 mb-6">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                    <i class="fas fa-wand-magic-sparkles"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-slate-900">AI Project Architect</h3>
-                    <p class="text-xs text-slate-500 uppercase tracking-widest">v2.4 Live</p>
-                </div>
+    <!-- AI PROJECT ARCHITECT -->
+    <div class="col-span-12 lg:col-span-4 space-y-8">
+        <div class="bg-white rounded-[3rem] p-12 shadow-sm border border-slate-50 relative overflow-hidden group">
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-indigo-50 rounded-full group-hover:scale-110 transition-transform duration-700"></div>
+            
+            <div class="relative z-10">
+                <h3 class="text-3xl font-black text-slate-900 tracking-tighter mb-8 leading-none">AI Project Architect</h3>
+                
+                <form id="createProjectForm" class="space-y-8">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Project Vision</label>
+                        <textarea id="projectVision" class="w-full bg-slate-50 rounded-3xl p-6 text-sm font-bold text-slate-700 border border-transparent focus:border-indigo-500 focus:bg-white outline-none transition-all placeholder:opacity-30" rows="5" placeholder="Describe your technical vision..."></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Budget Node ($)</label>
+                            <input type="number" id="projectBudget" class="w-full bg-slate-50 rounded-2xl p-5 text-sm font-bold text-slate-700 border border-transparent focus:border-indigo-500 focus:bg-white outline-none transition-all" placeholder="5000">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Timeline (Days)</label>
+                            <input type="number" id="projectDeadline" class="w-full bg-slate-50 rounded-2xl p-5 text-sm font-bold text-slate-700 border border-transparent focus:border-indigo-500 focus:bg-white outline-none transition-all" placeholder="30">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="genBtn" class="w-full bg-[#161922] text-white py-6 rounded-3xl font-black uppercase tracking-widest text-xs hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 group/btn overflow-hidden relative">
+                        <span class="relative z-10">Generating Milestones...</span>
+                        <div class="absolute inset-0 bg-indigo-500 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                    </button>
+                </form>
             </div>
-
-            <form id="createProjectForm" onsubmit="createProject(event)" class="space-y-4">
-                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Project Vision</label>
-                    <textarea id="description" rows="4" class="w-full bg-transparent border-none outline-none text-sm text-slate-700 placeholder-slate-400" placeholder="e.g. Build a DeFi dashboard with real-time analytics..."></textarea>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Budget</label>
-                        <input type="text" id="budget" class="w-full bg-transparent border-none outline-none font-bold text-indigo-600" placeholder="$0.00">
-                    </div>
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Timeline</label>
-                        <input type="date" id="deadline" class="w-full bg-transparent border-none outline-none text-xs font-bold text-slate-700">
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center space-x-3 hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200">
-                    <span>Generate Roadmap</span>
-                    <i class="fas fa-chevron-right text-xs opacity-50"></i>
-                </button>
-            </form>
         </div>
 
-        <!-- AI SYSTEM LOG -->
-        <div class="bg-slate-900 rounded-3xl p-6 text-indigo-300 font-mono text-[10px] shadow-2xl">
-            <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-2">
-                <span>SYSTEM_LOG</span>
-                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+        <!-- ACTIVE MONITOR (Stats) -->
+        <div class="bg-[#161922] rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+             <div class="absolute bottom-0 right-0 p-8">
+                <i class="fas fa-microchip text-indigo-500/20 text-6xl"></i>
             </div>
-            <div class="space-y-1 opacity-80">
-                <p>> Agent_Alpha initialized...</p>
-                <p>> Scanning talent pool for React/Solidity skills...</p>
-                <p class="text-white">> 4 Milestones drafted by AI.</p>
-                <p>> Waiting for user confirmation...</p>
+            <h4 class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Infrastructure Health</h4>
+            <div class="flex items-end space-x-3 mb-8">
+                <span class="text-5xl font-black italic tracking-tighter">99.8%</span>
+                <span class="text-[10px] font-bold text-emerald-400 uppercase mb-2">Uptime verified</span>
+            </div>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                    <span>Neural Logic Load</span>
+                    <span class="text-white">Active</span>
+                </div>
+                <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full bg-indigo-500 w-3/4 rounded-full shadow-[0_0_10px_#6366f1]"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- RIGHT: PROJECT MONITOR -->
-    <div class="col-span-12 lg:col-span-8 space-y-6">
-        <div class="flex items-center justify-between">
-            <h3 class="text-xl font-bold text-slate-900">Active Infrastructure</h3>
-            <div class="flex space-x-2">
-                <span class="px-4 py-2 bg-white rounded-full text-xs font-bold border shadow-sm">Total Spent: $12.4k</span>
-                <span class="px-4 py-2 bg-white rounded-full text-xs font-bold border shadow-sm">AI Verifications: 42</span>
+    <!-- WORKSPACE: ACTIVE INFRASTRUCTURE -->
+    <div class="col-span-12 lg:col-span-8 space-y-10">
+        <div class="flex items-center justify-between px-2">
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-none italic">Active Infrastructure Nodes</h3>
+            <div class="flex space-x-3">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div>
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Network Synchronized</span>
             </div>
         </div>
 
-        {% for project in projects %}
-        <div class="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <div class="flex flex-wrap justify-between items-start mb-8">
-                <div class="space-y-1">
-                    <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Project ID: #00{{ project.id }}</span>
-                    <h4 class="text-2xl font-black text-slate-900">{{ project.title }}</h4>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase">Health</p>
-                        <p class="text-emerald-500 font-bold">Stable</p>
+        <div id="projectNodes" class="space-y-8">
+            {% if projects %}
+                {% for project in projects %}
+                <div class="bg-white rounded-[3.5rem] p-10 border border-slate-50 shadow-sm hover:shadow-xl transition-all group relative">
+                    <div class="absolute top-10 right-10">
+                        <span class="px-4 py-2 bg-slate-50 rounded-full text-[9px] font-black text-slate-400 tracking-widest uppercase border border-slate-100 italic">{{ project.status }}</span>
                     </div>
-                    <div class="w-12 h-12 rounded-full border-4 border-slate-100 border-t-indigo-500 flex items-center justify-center">
-                        <span class="text-[10px] font-bold">60%</span>
-                    </div>
-                </div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {% for milestone in project.milestones %}
-                <div class="group p-5 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:border-indigo-200 transition-all">
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[10px] font-bold px-2 py-1 bg-white rounded border">M_{{ loop.index }}</span>
-                        {% if milestone.status == 'Completed' %}
-                        <span class="text-emerald-500 text-[10px] font-bold italic"><i class="fas fa-check-double mr-1"></i> AI VERIFIED</span>
-                        {% else %}
-                        <span class="text-orange-400 text-[10px] font-bold italic">PENDING VERIFICATION</span>
-                        {% endif %}
+                    <div class="flex items-start space-x-8 mb-10">
+                        <div class="relative">
+                            <svg class="w-16 h-16 transform -rotate-90">
+                                <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4" fill="transparent" class="text-slate-100" />
+                                <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4" fill="transparent" class="text-indigo-600 transition-all duration-1000" stroke-dasharray="175.9" stroke-dashoffset="35.18" />
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-black text-slate-900">80%</div>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors tracking-tight">{{ project.title }}</h4>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Valuation: ${{ project.budget }} • Deadline: {{ project.deadline|date:"M d" }}</p>
+                        </div>
                     </div>
-                    <h5 class="font-bold text-slate-800 mb-1">{{ milestone.name }}</h5>
-                    <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
-                        <div class="bg-indigo-500 h-full w-{% if milestone.status == 'Completed' %}full{% else %}1/3{% endif %}"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for milestone in project.milestones.all %}
+                        <div class="p-6 rounded-[2rem] bg-slate-50 border border-slate-50 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm border border-slate-100 text-slate-400">
+                                    <i class="fas fa-code text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-black text-slate-800">{{ milestone.title }}</p>
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ milestone.status }}</p>
+                                </div>
+                            </div>
+                            {% if milestone.status == 'Paid' %}
+                                <i class="fas fa-check-circle text-emerald-500 shadow-xl shadow-emerald-100"></i>
+                            {% else %}
+                                <div class="w-2 h-2 bg-slate-200 rounded-full"></div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
                     </div>
+                    
+                    <!-- Applicant Section for 'Open' projects -->
+                    {% if project.status == 'Open' %}
+                        <div class="mt-10 pt-10 border-t border-dashed border-slate-100">
+                            <h5 class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-6">Neural Node Applicants</h5>
+                            <div class="flex flex-wrap gap-4">
+                                <div class="flex items-center space-x-4 bg-indigo-50/50 px-6 py-4 rounded-3xl border border-indigo-100 group/item hover:bg-white hover:shadow-lg transition-all cursor-pointer">
+                                    <div class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-xs">NE</div>
+                                    <div>
+                                        <p class="text-xs font-black text-slate-900">Neural_Engineer</p>
+                                        <p class="text-[9px] font-black text-indigo-400 uppercase tracking-widest">PFI Core: 98.4</p>
+                                    </div>
+                                    <button onclick="alert('Connection Established. Engineer Hired!')" class="ml-4 w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-[10px] hover:scale-110 active:scale-95 transition-all">
+                                        <i class="fas fa-link"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center space-x-4 bg-slate-50/50 px-6 py-4 rounded-3xl border border-slate-100 opacity-60">
+                                    <div class="w-10 h-10 bg-slate-200 rounded-2xl flex items-center justify-center text-slate-400 font-black text-xs">UA</div>
+                                    <div>
+                                        <p class="text-xs font-black text-slate-900">User_Alpha</p>
+                                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">PFI Core: 62.1</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
+            {% else %}
+                <div class="py-32 bg-white rounded-[4rem] border-2 border-dashed border-slate-100 flex flex-col items-center justify-center space-y-6">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">
+                         <i class="fas fa-radar text-3xl animate-pulse"></i>
+                    </div>
+                    <div class="text-center px-12">
+                        <h4 class="text-xl font-black text-slate-400 uppercase tracking-widest">Zero active nodes detected</h4>
+                        <p class="text-slate-300 text-sm font-medium mt-2">Deploy your first technical vision above.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- NEURAL SYSTEM LOG -->
+        <div class="bg-white rounded-[3rem] p-12 border border-slate-50 shadow-sm">
+            <div class="flex items-center justify-between mb-10">
+                <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest">Neural System Log</h4>
+                <div class="flex items-center space-x-2">
+                    <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+                    <span class="text-[9px] font-black text-emerald-500 uppercase">Live Stream</span>
+                </div>
+            </div>
+            <div id="neuralLog" class="space-y-6 bg-slate-50 p-8 rounded-[2rem] font-mono text-[11px] h-64 overflow-y-auto custom-scrollbar">
+                <div class="flex space-x-4 opacity-50">
+                    <span class="text-slate-400">[01:42:04]</span>
+                    <span class="text-slate-600">SYS: NEURAL ENGINE INITIALIZED v2.4</span>
+                </div>
+                <div class="flex space-x-4">
+                    <span class="text-slate-400">[01:43:12]</span>
+                    <span class="text-indigo-500">AI: READY FOR PROJECT ARCHITECTURE INPUT.</span>
+                </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 </div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+</style>
+
+<script>
+    const form = document.getElementById('createProjectForm');
+    const genBtn = document.getElementById('genBtn');
+    const log = document.getElementById('neuralLog');
+
+    function addLog(msg, type = 'AI') {
+        const time = new Date().toLocaleTimeString('en-GB');
+        const div = document.createElement('div');
+        div.className = 'flex space-x-4 animate-in fade-in slide-in-from-left-2 duration-500';
+        div.innerHTML = `
+            <span class="text-slate-400">[${time}]</span>
+            <span class="${type === 'AI' ? 'text-indigo-500' : 'text-slate-600'}">${type}: ${msg}</span>
+        `;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const vision = document.getElementById('projectVision').value;
+        const budget = document.getElementById('projectBudget').value;
+        const deadline = document.getElementById('projectDeadline').value;
+
+        if (!vision || !budget) return alert("Vision and Budget nodes required.");
+
+        genBtn.disabled = true;
+        genBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> PROCESSING VISION...';
+        
+        addLog("DECONSTRUCTING ARCHITECTURE...", "SYS");
+        
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/projects/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`
+                },
+                body: JSON.stringify({
+                    title: vision.substring(0, 30) + (vision.length > 30 ? '...' : ''),
+                    description: vision,
+                    budget: budget,
+                    deadline_days: deadline || 30
+                })
+            });
+
+            if (response.ok) {
+                addLog("MILESTONES SYNCHRONIZED SUCCESSFULLY.", "AI");
+                addLog("ESCROW CONTRACT DEPLOYED: 0x" + Math.random().toString(16).slice(2, 10).toUpperCase(), "SYS");
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                const err = await response.json();
+                addLog("ERROR: " + (err.error || "Neural collapse."), "SYS");
+                genBtn.disabled = false;
+                genBtn.innerHTML = 'Generating Milestones...';
+            }
+        } catch (err) {
+            addLog("FATAL: PERSISTENCE LAYER TIMEOUT.", "SYS");
+            genBtn.disabled = false;
+            genBtn.innerHTML = 'Generating Milestones...';
+        }
+    });
+
+    // Auto-scroll log
+    log.scrollTop = log.scrollHeight;
+</script>
 {% endblock %}

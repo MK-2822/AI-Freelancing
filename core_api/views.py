@@ -41,12 +41,26 @@ class ProjectListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         project = serializer.save(client=self.request.user)
         
-        # Trigger Flask AI Milestone Generation
+        # 1. Trigger AI Negotiation Check
+        try:
+            neg_resp = requests.post(f"{FLASK_AI_URL}/negotiation-check", json={
+                "description": project.description,
+                "budget": str(project.budget)
+            }, timeout=10)
+            if neg_resp.status_code == 200:
+                neg_data = neg_resp.json()
+                if neg_data.get('status') == 'Unrealistic':
+                    print(f"AI Warning: {neg_data.get('message')}")
+        except requests.RequestException:
+            pass
+
+        # 2. Trigger Flask AI Milestone Generation
         try:
             ai_resp = requests.post(f"{FLASK_AI_URL}/generate-milestones", json={
                 "project_id": project.id,
                 "description": project.description,
-                "budget": str(project.budget)
+                "budget": str(project.budget),
+                "deadline": project.deadline.isoformat() if project.deadline else None
             }, timeout=10)
             
             if ai_resp.status_code == 200:
@@ -72,6 +86,17 @@ class ProjectApplyView(generics.CreateAPIView):
     queryset = ProjectApplication.objects.all()
     serializer_class = ProjectApplicationSerializer
     permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        if request.user.role != 'Freelancer':
+            return Response({'error': 'Only engineers can connect to project nodes.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Check if already applied
+        project_id = request.data.get('project')
+        if ProjectApplication.objects.filter(project_id=project_id, freelancer=request.user).exists():
+            return Response({'error': 'Neural link already established for this node.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(freelancer=self.request.user)
@@ -107,17 +132,26 @@ class MilestoneSubmitView(generics.CreateAPIView):
                 elif score >= 80.0:
                     submission.status = 'Auto-Approved'
 
-                    # Freelancer ko paise mil gaye!
-                    freelancer.wallet_balance += submission.milestone.payment
+                    # Escrow logic: Deduct from client and add to freelancer
+                    client = submission.milestone.project.client
+                    payment_amount = submission.milestone.payment
+                    
+                    if client.wallet_balance >= payment_amount:
+                        client.wallet_balance -= payment_amount
+                        freelancer.wallet_balance += payment_amount
+                        client.save()
+                        freelancer.save()
 
-                    # PFI Score badha do (Gamification)
-                    freelancer.pfi_score += 5.0
-                    freelancer.save()
+                        # PFI Score badha do (Gamification)
+                        freelancer.pfi_score += 5.0
+                        freelancer.save()
 
-                    # Milestone update
-                    milestone = submission.milestone
-                    milestone.status = 'Paid'
-                    milestone.save()
+                        # Milestone update
+                        milestone = submission.milestone
+                        milestone.status = 'Paid'
+                        milestone.save()
+                    else:
+                        submission.status = 'Payment Failed - Client Insufficient Funds'
                 else:
                     submission.status = 'Needs Revision'
                     freelancer.pfi_score -= 2.0

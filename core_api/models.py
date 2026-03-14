@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
@@ -27,6 +26,9 @@ class ProjectApplication(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='applications')
     freelancer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications')
     status = models.CharField(max_length=50, default='Pending')
+
+    class Meta:
+        unique_together = ('project', 'freelancer')
 
 class Submission(models.Model):
     milestone = models.ForeignKey(Milestone, on_delete=models.CASCADE, related_name='submissions')

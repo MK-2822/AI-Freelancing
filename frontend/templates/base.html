@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,55 +8,84 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        .sidebar { background-color: #2D328C; }
+        .sidebar-item-active { background-color: #3B3F9C; border-radius: 0.75rem; }
+        .sidebar-item:hover { background-color: rgba(255,255,255,0.05); border-radius: 0.75rem; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="text-slate-900">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-indigo-900 text-white hidden md:flex flex-col">
-            <div class="p-6 text-2xl font-bold border-b border-indigo-800">
-                🚀 TrustLancer <span class="text-indigo-400">AI</span>
+        <aside class="w-72 bg-[#2D328C] text-white hidden md:flex flex-col shadow-2xl z-50">
+            <div class="p-10 flex items-center space-x-3">
+                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/20">
+                    <i class="fas fa-rocket text-white text-xl"></i>
+                </div>
+                <div class="leading-tight">
+                    <h1 class="text-2xl font-black tracking-tighter uppercase italic">TrustLancer</h1>
+                    <span class="text-indigo-300 text-[10px] font-black uppercase tracking-[0.3em]">AI COMMAND CENTER</span>
+                </div>
             </div>
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-800 bg-indigo-800">
-                    <i class="fas fa-home mr-2"></i> Dashboard
+            
+            <nav class="flex-1 px-6 space-y-4 mt-10">
+                <a href="{% if user_type == 'Client' %}/client-dashboard{% else %}/freelancer-dashboard{% endif %}" class="flex items-center space-x-4 py-4 px-6 rounded-2xl transition-all font-bold {% if 'dashboard' in request.path %}bg-white/10 border-l-4 border-indigo-400 text-white shadow-lg{% else %}opacity-60 hover:opacity-100 hover:bg-white/5{% endif %}">
+                    <i class="fas fa-th-large {% if 'dashboard' in request.path %}text-indigo-300{% endif %}"></i>
+                    <span class="text-sm">Dashboard</span>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-800">
-                    <i class="fas fa-project-diagram mr-2"></i> My Projects
+                <a href="/projects" class="flex items-center space-x-4 py-4 px-6 rounded-2xl transition-all font-bold {% if 'projects' in request.path %}bg-white/10 border-l-4 border-indigo-400 text-white shadow-lg{% else %}opacity-60 hover:opacity-100 hover:bg-white/5{% endif %}">
+                    <i class="fas fa-folder {% if 'projects' in request.path %}text-indigo-300{% endif %}"></i>
+                    <span class="text-sm">My Projects</span>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-800">
-                    <i class="fas fa-wallet mr-2"></i> Payments
+                <a href="/payments" class="flex items-center space-x-4 py-4 px-6 rounded-2xl transition-all font-bold {% if 'payments' in request.path %}bg-white/10 border-l-4 border-indigo-400 text-white shadow-lg{% else %}opacity-60 hover:opacity-100 hover:bg-white/5{% endif %}">
+                    <i class="fas fa-wallet {% if 'payments' in request.path %}text-indigo-300{% endif %}"></i>
+                    <span class="text-sm">Payments</span>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-indigo-800">
-                    <i class="fas fa-robot mr-2"></i> AI Agent Lab
+                <a href="/agent-lab" class="flex items-center space-x-4 py-4 px-6 rounded-2xl transition-all font-bold {% if 'agent-lab' in request.path %}bg-white/10 border-l-4 border-indigo-400 text-white shadow-lg{% else %}opacity-60 hover:opacity-100 hover:bg-white/5{% endif %}">
+                    <i class="fas fa-robot {% if 'agent-lab' in request.path %}text-indigo-300{% endif %}"></i>
+                    <span class="text-sm">AI Agent Lab</span>
+                </a>
+                <a href="/marketplace" class="flex items-center space-x-4 py-4 px-6 rounded-2xl transition-all font-bold {% if 'marketplace' in request.path %}bg-white/10 border-l-4 border-indigo-400 text-white shadow-lg{% else %}opacity-60 hover:opacity-100 hover:bg-white/5{% endif %}">
+                    <i class="fas fa-search-dollar {% if 'marketplace' in request.path %}text-indigo-300{% endif %}"></i>
+                    <span class="text-sm">Marketplace</span>
                 </a>
             </nav>
-            <div class="p-4 border-t border-indigo-800">
-                <a href="/login" class="block py-2.5 px-4 text-sm hover:text-indigo-300">Logout</a>
+            
+            <div class="p-10 mt-auto">
+                <a href="/login" class="flex items-center space-x-3 opacity-60 hover:opacity-100 transition-all font-bold">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="text-sm">Logout</span>
+                </a>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col overflow-y-auto">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-[#F1F5F9]">
             <!-- Top Nav -->
-            <header class="bg-white shadow-sm h-16 flex items-center justify-between px-8">
-                <h2 class="text-xl font-semibold text-slate-800">{% block title %}{% endblock %}</h2>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm font-medium text-slate-500">{{ user_type }} Mode</span>
-                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
-                        JD
+            <header class="h-24 flex items-center justify-end px-12 bg-transparent">
+                <div class="flex items-center space-x-10">
+                    <div class="flex items-center space-x-4 group cursor-pointer">
+                        <div class="text-right">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Authenticated</p>
+                            <p class="text-xs font-black text-slate-800">UNNAT.AI</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-white shadow-xl shadow-slate-200 flex items-center justify-center text-indigo-600 font-black border border-slate-50 relative group-hover:scale-110 transition-transform">
+                            UA
+                            <div class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <div class="p-8">
+            <div class="px-12 pb-12">
+                <h2 class="text-4xl font-black text-slate-900 tracking-tighter mb-10">{% block title %}{% endblock %}</h2>
                 {% block content %}{% endblock %}
             </div>
         </main>
     </div>
 
-    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{% static 'js/api.js' %}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}AI Agent Neural Lab{% endblock %}
+
+{% block content %}
+<div class="space-y-12">
+    <div class="bg-[#161922] rounded-[4rem] p-16 text-white relative overflow-hidden shadow-2xl border border-white/5">
+        <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_30%,rgba(99,102,241,0.15),transparent_60%)]"></div>
+        
+        <div class="max-w-2xl relative z-10">
+            <span class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-6 block">AGENT CORE v4.1</span>
+            <h2 class="text-5xl font-black italic tracking-tighter mb-8 leading-[1.1]">Where Intelligence <br> Meets Autonomous Work.</h2>
+            <p class="text-slate-400 text-lg font-medium leading-relaxed mb-10">
+                Monitor and configure the autonomous neural networks protecting your projects. 
+                Our agents handle everything from milestone generation to code verification 24/7.
+            </p>
+            <div class="flex items-center space-x-12">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl font-black text-white italic">03</span>
+                    <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">Agents<br>Online</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl font-black text-emerald-500 italic">99.8%</span>
+                    <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">Precision<br>Accuracy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Agent Card 1 -->
+        <div class="bg-white rounded-[3rem] p-10 border border-slate-50 shadow-sm hover:shadow-2xl transition-all group">
+            <div class="w-16 h-16 bg-indigo-50 rounded-3xl flex items-center justify-center text-indigo-600 mb-8 border border-slate-100 shadow-sm transition-transform group-hover:scale-110">
+                <i class="fas fa-eye text-2xl"></i>
+            </div>
+            <h4 class="text-2xl font-black text-slate-800 mb-4 tracking-tight">Sentinel-X</h4>
+            <p class="text-slate-400 text-sm font-medium leading-relaxed mb-10">Autonomous code auditor that scans repository commits for security vulnerabilities and milestone adherence.</p>
+            <div class="bg-slate-50 p-6 rounded-2xl flex justify-between items-center">
+                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</span>
+                <span class="text-[10px] font-black text-emerald-500 uppercase italic">Active Monitoring</span>
+            </div>
+        </div>
+
+        <!-- Agent Card 2 -->
+        <div class="bg-white rounded-[3rem] p-10 border border-slate-50 shadow-sm hover:shadow-2xl transition-all group">
+            <div class="w-16 h-16 bg-emerald-50 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 border border-slate-100 shadow-sm transition-transform group-hover:scale-110">
+                <i class="fas fa-lock text-2xl"></i>
+            </div>
+            <h4 class="text-2xl font-black text-slate-800 mb-4 tracking-tight">Escrow.AI</h4>
+            <p class="text-slate-400 text-sm font-medium leading-relaxed mb-10">The financial backbone. Automatically secures project funds and releases payments upon Sentinel authorization.</p>
+            <div class="bg-slate-50 p-6 rounded-2xl flex justify-between items-center">
+                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</span>
+                <span class="text-[10px] font-black text-indigo-500 uppercase italic">Standby Mode</span>
+            </div>
+        </div>
+
+        <!-- Agent Card 3 -->
+        <div class="bg-white rounded-[3rem] p-10 border border-slate-50 shadow-sm hover:shadow-2xl transition-all group">
+            <div class="w-16 h-16 bg-pink-50 rounded-3xl flex items-center justify-center text-pink-600 mb-8 border border-slate-100 shadow-sm transition-transform group-hover:scale-110">
+                <i class="fas fa-network-wired text-2xl"></i>
+            </div>
+            <h4 class="text-2xl font-black text-slate-800 mb-4 tracking-tight">MatchMaker-7</h4>
+            <p class="text-slate-400 text-sm font-medium leading-relaxed mb-10">Optimizes the Profile Factor Index (PFI) to match technical visions with high-reputation engineering nodes.</p>
+            <div class="bg-slate-50 p-6 rounded-2xl flex justify-between items-center">
+                <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</span>
+                <span class="text-[10px] font-black text-pink-500 uppercase italic">Calculating PFI</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

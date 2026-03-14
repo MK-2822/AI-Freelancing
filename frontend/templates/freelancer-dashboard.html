@@ -1,94 +1,288 @@
 {% extends "base.html" %}
-{% block title %}Engineer Workspace{% endblock %}
+{% block title %}Engineer Command Center{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-12 gap-8">
+<div class="grid grid-cols-12 gap-10">
     
-    <!-- TOP STATS: THE REPUTATION ENGINE -->
-    <div class="col-span-12 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-indigo-600 p-6 rounded-[2rem] text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
-            <p class="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-1">Trust Score (PFI)</p>
-            <h3 class="text-4xl font-black italic">98.4<span class="text-lg text-indigo-300">/100</span></h3>
-            <i class="fas fa-shield-halved absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
+    <!-- TOP REPUTATION ENGINE (Stats Cards) -->
+    <div class="col-span-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-[#2D328C] p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden group">
+            <div class="relative z-10">
+                <p class="text-indigo-200 text-[10px] font-bold uppercase tracking-widest mb-2">Trust Score (PFI)</p>
+                <h3 class="text-5xl font-black italic tracking-tighter">{{ user.pfi_score|default:"98.4" }}<span class="text-xl text-indigo-300 opacity-50 ml-1">/100</span></h3>
+                <div class="mt-4 inline-flex items-center px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold">
+                    <i class="fas fa-arrow-up mr-1 text-emerald-400"></i> TOP 1%
+                </div>
+            </div>
+            <i class="fas fa-shield-halved absolute -right-6 -bottom-6 text-9xl opacity-10 group-hover:scale-110 transition-transform duration-700"></i>
         </div>
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Verified Revenue</p>
-            <h3 class="text-3xl font-black text-slate-900">$14,200</h3>
+
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-50 shadow-sm relative overflow-hidden">
+            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Verified Revenue</p>
+            <h3 class="text-4xl font-black text-slate-900 tracking-tight">$14,200</h3>
+            <div class="mt-4 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-full w-[80%] rounded-full"></div>
+            </div>
         </div>
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Active AI Agents</p>
-            <h3 class="text-3xl font-black text-slate-900">03</h3>
+
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-50 shadow-sm relative overflow-hidden">
+            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Active AI Agents</p>
+            <h3 class="text-4xl font-black text-slate-900 tracking-tight">03</h3>
+            <div class="mt-4 flex -space-x-2">
+                <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] text-white font-bold border-2 border-white">S</div>
+                <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] text-white font-bold border-2 border-white">E</div>
+                <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-[10px] text-white font-bold border-2 border-white">A</div>
+            </div>
         </div>
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100">
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Global Rank</p>
-            <h3 class="text-3xl font-black text-emerald-500">#42</h3>
+
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-50 shadow-sm relative overflow-hidden">
+            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Global Rank</p>
+            <h3 class="text-4xl font-black text-emerald-500 tracking-tight">#42</h3>
+            <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase">Rising Star Badge</p>
         </div>
     </div>
 
-    <!-- WORKSPACE -->
-    <div class="col-span-12 lg:col-span-8 space-y-6">
-        <h3 class="text-xl font-bold text-slate-900 ml-2">Active Engineering Contracts</h3>
-        {% for project in projects %}
-        <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100">
-            <div class="flex justify-between items-center mb-8">
-                <div>
-                    <h4 class="text-2xl font-black text-slate-900">{{ project.title }}</h4>
-                    <p class="text-sm text-slate-400 font-medium">Protocol: {{ project.client }} | Smart Contract Milestone Enabled</p>
-                </div>
-                <div class="bg-slate-50 px-4 py-2 rounded-2xl border">
-                    <span class="text-xs font-bold text-slate-500 uppercase">Valuation</span>
-                    <p class="text-lg font-black text-indigo-600">{{ project.budget }}</p>
-                </div>
-            </div>
+    <!-- WORKSPACE: ACTIVE CONTRACTS -->
+    <div class="col-span-12 lg:col-span-8 space-y-10">
+        <div class="flex items-center justify-between px-2">
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight">Active Engineering Contracts</h3>
+            <a href="/marketplace" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors">Find New Projects <i class="fas fa-chevron-right ml-1 text-xs"></i></a>
+        </div>
 
-            <div class="space-y-4">
-                {% for milestone in project.milestones %}
-                <div class="flex items-center justify-between p-6 rounded-3xl border border-slate-50 bg-slate-50/30">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-white rounded-2xl border flex items-center justify-center text-slate-400 shadow-sm">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-900">{{ milestone.name }}</p>
-                            <p class="text-[10px] text-slate-400 font-mono italic">Verification Method: AI Code Review</p>
+        {% if projects %}
+            {% for project in projects %}
+            <div class="bg-white rounded-[3rem] p-10 border border-slate-50 shadow-xl shadow-slate-200/40 relative group mb-10">
+                <div class="flex justify-between items-start mb-10">
+                    <div>
+                        <h4 class="text-3xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors">{{ project.title }}</h4>
+                        <div class="flex items-center space-x-4 mt-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Client: {{ project.client.username }}</span>
+                            <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest flex items-center">
+                                <i class="fas fa-check-circle mr-1"></i> Smart Contract Escrow Active
+                            </span>
                         </div>
                     </div>
-                    {% if milestone.status != 'Completed' %}
-                    <button onclick="openSubmitModal('{{ milestone.name }}')" class="bg-slate-900 text-white px-6 py-3 rounded-xl text-xs font-bold hover:bg-indigo-600 transition shadow-lg shadow-slate-200">
-                        OPEN SUBMISSION HUB
-                    </button>
+                    <div class="bg-slate-50 px-6 py-4 rounded-3xl border border-slate-100 text-center min-w-[120px]">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Valuation</span>
+                        <p class="text-xl font-black text-indigo-600">${{ project.budget }}</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    {% if project.milestones.all %}
+                        {% for milestone in project.milestones.all %}
+                        <div class="flex items-center justify-between p-7 rounded-[2.5rem] border border-slate-50 bg-slate-50/50 hover:bg-white hover:border-indigo-200 hover:shadow-lg transition-all">
+                            <div class="flex items-center space-x-5">
+                                <div class="w-14 h-14 bg-white rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 shadow-sm relative">
+                                    <i class="fas fa-code"></i>
+                                    {% if milestone.status == 'Paid' or milestone.status == 'Completed' %}
+                                    <div class="absolute -top-2 -right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white text-[10px] border-2 border-white shadow-lg">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <p class="text-base font-extrabold text-slate-900 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600">{{ milestone.title }}</p>
+                                    <p class="text-[10px] text-slate-400 font-mono italic mt-0.5">Verification: Autonomous Audit v2.0</p>
+                                </div>
+                            </div>
+                            
+                            {% if milestone.status != 'Paid' and milestone.status != 'Completed' %}
+                            <button onclick="openSubmissionHub({{ milestone.id }}, '{{ milestone.title }}')" class="bg-[#0F111A] text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200">
+                                OPEN SUBMISSION HUB
+                            </button>
+                            {% else %}
+                            <div class="text-right">
+                                <div class="px-4 py-1.5 bg-emerald-50 rounded-full text-emerald-500 text-[10px] font-black uppercase tracking-widest italic mb-1">
+                                    VERIFIED & RELEASED
+                                </div>
+                                <span class="text-[10px] text-slate-300 font-mono tracking-tighter">HASH: TL-{{ milestone.id }}-VERIFY-OK</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
                     {% else %}
-                    <div class="flex flex-col items-end">
-                        <span class="text-emerald-500 text-xs font-bold">VERIFIED</span>
-                        <span class="text-[10px] text-slate-300 font-mono">HASH: 0x42...F3E</span>
-                    </div>
+                        <p class="text-slate-400 italic text-center py-4">No milestones available for this project.</p>
                     {% endif %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+             <div class="flex flex-col items-center justify-center py-32 bg-white rounded-[3rem] border border-dashed border-slate-200 border-2 space-y-6 shadow-sm">
+                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center">
+                    <i class="fas fa-code-branch text-slate-300 text-3xl"></i>
+                </div>
+                <div class="text-center px-8">
+                    <h4 class="text-xl font-bold text-slate-900">No Active Contracts</h4>
+                    <p class="text-slate-400 text-sm">Find projects in the <span class="text-indigo-500 font-bold">Lancer Marketplace</span> to start earning.</p>
+                </div>
+                <a href="/marketplace" class="bg-[#161922] text-white px-10 py-5 rounded-3xl font-black uppercase tracking-widest text-[11px] hover:bg-indigo-600 transition shadow-xl shadow-indigo-100">
+                    Explore Marketplace
+                </a>
+            </div>
+        {% endif %}
     </div>
 
-    <!-- AI AGENT ACTIVITY (The "Engineer" touch) -->
-    <div class="col-span-12 lg:col-span-4 space-y-6">
-        <div class="bg-slate-50 rounded-[2rem] p-8 border border-slate-100">
-            <h4 class="font-bold text-slate-900 mb-6 flex items-center">
-                <i class="fas fa-bolt text-orange-400 mr-2"></i> Real-time AI Audit
+    <!-- AI AGENT ACTIVITY -->
+    <div class="col-span-12 lg:col-span-4 space-y-8">
+        <div class="bg-[#0F111A] rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden ring-1 ring-white/10">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl"></div>
+            
+            <h4 class="font-extrabold text-xl mb-10 flex items-center tracking-tight">
+                <i class="fas fa-bolt text-indigo-400 mr-3 animate-pulse"></i> Neural Node Status
+            </h4>
+            <div class="space-y-10">
+                <div class="relative pl-8 border-l-2 border-indigo-500/30">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-indigo-500 rounded-full border-4 border-[#0F111A] shadow-[0_0_10px_#6366f1]"></div>
+                    <p class="text-sm font-bold text-white uppercase tracking-tight">Sentinel v4.2</p>
+                    <p class="text-[11px] text-slate-400 mt-2 leading-relaxed font-medium">Monitoring repo for commits. Last analysis: 2m ago.</p>
+                </div>
+                <div class="relative pl-8 border-l-2 border-white/5">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-slate-700 rounded-full border-4 border-[#0F111A]"></div>
+                    <p class="text-sm font-bold text-slate-400 uppercase tracking-tight italic">Escrow Agent</p>
+                    <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">Waiting for milestone cryptographic confirmation.</p>
+                </div>
+                <div class="relative pl-8">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 bg-emerald-500 rounded-full border-4 border-[#0F111A] shadow-[0_0_10px_#10b981]"></div>
+                    <p class="text-sm font-bold text-emerald-400 uppercase tracking-tight">Bounty Scanner</p>
+                    <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">Global scan complete. 4 new matches found in your stack.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GROWTH Analytics -->
+        <div class="bg-white rounded-[2.5rem] p-10 border border-slate-50 shadow-sm">
+             <h4 class="font-black text-slate-900 mb-8 flex items-center tracking-tight uppercase text-xs">
+                <i class="fas fa-chart-line text-indigo-500 mr-3"></i> Node Performance
             </h4>
             <div class="space-y-6">
-                <div class="relative pl-6 border-l-2 border-indigo-200">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-indigo-500 rounded-full border-4 border-slate-50"></div>
-                    <p class="text-xs font-bold text-slate-800">Agent "Sentinel" Scanning</p>
-                    <p class="text-[10px] text-slate-500 mt-1">Checking repository 'TrustLancer-Core' for milestone 2 compliance...</p>
+                <div class="flex justify-between items-center bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Submit Accuracy</span>
+                    <span class="text-lg font-black text-indigo-600 italic">99.2%</span>
                 </div>
-                <div class="relative pl-6 border-l-2 border-slate-200">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-slate-300 rounded-full border-4 border-slate-50"></div>
-                    <p class="text-xs font-bold text-slate-400">Agent "Escrow" Waiting</p>
-                    <p class="text-[10px] text-slate-500 mt-1">Ready to release $2,500 once Sentinel confirms verification.</p>
+                <div class="flex justify-between items-center bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Release Speed</span>
+                    <span class="text-lg font-black text-emerald-600 italic">Avg 3m</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- SUBMISSION MODAL -->
+<div id="submissionModal" class="fixed inset-0 bg-[#0F111A]/80 backdrop-blur-xl z-[100] hidden items-center justify-center p-6">
+    <div class="bg-white rounded-[3rem] w-full max-w-xl p-12 relative shadow-2xl animate-in zoom-in-95 duration-300">
+        <button onclick="closeSubmissionHub()" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition-colors">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+
+        <div class="flex items-center space-x-5 mb-10">
+            <div class="w-16 h-16 bg-indigo-500 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-indigo-100">
+                <i class="fab fa-github text-3xl"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">AI Submission Hub</h3>
+                <p id="modalMilestoneTitle" class="text-[10px] text-slate-400 font-black uppercase tracking-widest">Milestone Title</p>
+            </div>
+        </div>
+
+        <form id="submissionForm" class="space-y-8">
+            <input type="hidden" id="milestoneId">
+            <div class="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 focus-within:ring-4 focus-within:ring-indigo-500/5 focus-within:border-indigo-200 transition-all">
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Repository Artifact URL</label>
+                <div class="flex items-center">
+                    <i class="fas fa-link text-slate-300 mr-4"></i>
+                    <input type="url" id="githubLink" class="w-full bg-transparent border-none outline-none text-base font-bold text-slate-700" placeholder="https://github.com/user/repo" required>
+                </div>
+            </div>
+
+            <div class="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 focus-within:ring-4 focus-within:ring-indigo-500/5 focus-within:border-indigo-200 transition-all">
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Neural Access Token (Optional)</label>
+                <div class="flex items-center">
+                    <i class="fas fa-key text-slate-300 mr-4"></i>
+                    <input type="password" class="w-full bg-transparent border-none outline-none text-base font-bold text-slate-700" placeholder="••••••••••••••••">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-[#161922] text-white py-7 rounded-[2rem] font-black text-lg flex items-center justify-center space-x-4 hover:scale-[1.02] transition-all shadow-2xl">
+                <span>Deploy Submission</span>
+                <i class="fas fa-cloud-upload-alt text-indigo-400"></i>
+            </button>
+        </form>
+
+        <!-- Dynamic Success Message -->
+        <div id="successMsg" class="hidden text-center space-y-6 pt-10">
+            <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
+                <i class="fas fa-shield-check text-emerald-500 text-3xl"></i>
+            </div>
+            <div>
+                <h4 class="text-xl font-black text-slate-900">Submission Synchronized</h4>
+                <p class="text-slate-400 text-sm font-medium">The Sentinel agent is currently auditing your node. Payment will release upon 3 node confirmations.</p>
+            </div>
+            <button onclick="location.reload()" class="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Close Hub</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const modal = document.getElementById('submissionModal');
+    const form = document.getElementById('submissionForm');
+    const successMsg = document.getElementById('successMsg');
+
+    function openSubmissionHub(id, title) {
+        document.getElementById('milestoneId').value = id;
+        document.getElementById('modalMilestoneTitle').innerText = title;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeSubmissionHub() {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        form.classList.remove('hidden');
+        successMsg.classList.add('hidden');
+    }
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const milestoneId = document.getElementById('milestoneId').value;
+        const githubLink = document.getElementById('githubLink').value;
+        const btn = document.getElementById('submitBtn');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> AUDITING NODE...';
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/milestone/submit/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`
+                },
+                body: JSON.stringify({ 
+                    milestone: milestoneId,
+                    github_link: githubLink 
+                })
+            });
+
+            if (response.ok) {
+                form.classList.add('hidden');
+                successMsg.classList.remove('hidden');
+            } else {
+                alert("Audit rejected by neural core.");
+                btn.disabled = false;
+                btn.innerHTML = 'Deploy Submission';
+            }
+        } catch (err) {
+            alert("Connection loss to LLM Gateway.");
+            btn.disabled = false;
+            btn.innerHTML = 'Deploy Submission';
+        }
+    });
+</script>
 {% endblock %}

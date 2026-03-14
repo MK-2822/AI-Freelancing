@@ -1,14 +1,30 @@
 # flask_app/agents/milestone_agent.py
 
 def generate_milestones(description, budget, deadline):
-    # In a real scenario, you'd send 'description' to OpenAI/GPT-4 here.
-    # Mocking AI logic based on keywords:
-    milestones = [
-        {"milestone": "Project Initialization & Requirements", "share": 0.10},
-        {"milestone": "Core Backend & Database Setup", "share": 0.30},
-        {"milestone": "Frontend Integration & UI", "share": 0.30},
-        {"milestone": "Testing & Final Deployment", "share": 0.30},
-    ]
+    # Mocking AI logic with keyword detection for a high-quality demo
+    desc = description.lower()
+    
+    if "defi" in desc or "blockchain" in desc:
+        workflow = [
+            ("Smart Contract Architecture", 0.20),
+            ("Liquidity Pool Logic & Auditing", 0.35),
+            ("Web3 Provider Integration", 0.25),
+            ("Mainnet Staging & Gas Optimization", 0.20)
+        ]
+    elif "ai" in desc or "ml" in desc or "trading" in desc:
+        workflow = [
+            ("Neural Data Pipeline & Cleaning", 0.25),
+            ("Model Architecture & Training", 0.40),
+            ("Inference API & Real-time Stream", 0.20),
+            ("Optimization & Latency Stress Test", 0.15)
+        ]
+    else:
+        workflow = [
+            ("Infrastructure & Database Schema", 0.15),
+            ("Core API Engine & Business Logic", 0.45),
+            ("Frontend UI/UX Implementation", 0.25),
+            ("Final System Integration & QA", 0.15)
+        ]
     
     response = {
         "project": description,
@@ -17,13 +33,12 @@ def generate_milestones(description, budget, deadline):
         "milestones": []
     }
 
-    for i, m in enumerate(milestones):
+    for i, (title, share) in enumerate(workflow):
         response["milestones"].append({
             "step": i + 1,
-            "title": m["milestone"],
-            "payment": float(budget) * m["share"],
+            "title": title,
+            "payment": round(float(budget) * share, 2),
             "status": "pending"
         })
     
     return response
-    

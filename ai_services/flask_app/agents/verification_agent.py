@@ -12,6 +12,7 @@ def verify_submission(github_link):
     return {
         "completion_status": "Verified",
         "quality_score": quality_score,
+        "is_plagiarized": False,  # Added this field for fraud detection
         "approval_or_rejection": "Approved" if quality_score > 75 else "Needs Revision",
         "feedback": "Code follows PEP8 standards. Good documentation found."
     }

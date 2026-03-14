@@ -1,106 +1,74 @@
-# AI-Freelancing: TrustLancer AI
+# TrustLancer AI 🚀
+### *The Future of Work is AI-Driven.*
 
-An intelligent freelancing platform that integrates **Django** (Core REST API) and **Flask** (AI Service) to automate project milestones, code verification, freelancer matching, and payments.
-
-![TrustLancer](https://img.shields.io/badge/Status-Beta-success) ![Python](https://img.shields.io/badge/Python-3.10+-blue) ![Django](https://img.shields.io/badge/Django-5.2-green) ![Flask](https://img.shields.io/badge/Flask-3.1-black)
+TrustLancer AI is a decentralized freelancing platform powered by autonomous AI agents. We solve the core problems of the gig economy: **fraud, payment disputes, and project management overhead.**
 
 ---
 
-## 🚀 Features
+## 🌟 Key Features
 
-- **🤖 AI Milestones Generator**: Automatically drafts project milestones and budget splits based on project requirements.
-- **🔍 Auto-Verification**: AI agents scan submitted GitHub repositories, review the code, and assign a quality score.
-- **🎯 Smart Match**: Connects clients to top freelancers based on their Gamified **PFI (Profile Factor Index) Score**.
-- **💸 Automated Escrow**: Once AI approves a milestone (score > 80%), funds are automatically released to the freelancer's wallet.
-- **🎨 Glassmorphism UI**: A beautifully animated frontend portal offering separate dashboards for clients and freelancers.
+### 1. AI Project Architect
+Clients describe their vision in natural language. Our **Milestone Agent** deconstructs the request into technical milestones with fair budget splits automatically.
+
+### 2. Autonomous AI Audit
+Freelancers submit GitHub repository links. Our **Verification Agent** autonomous reviews the code quality, adherence to milestones, and security before authorizing payment release.
+
+### 3. Smart Contract Escrow
+Payments are held in a secure liquid escrow. Funds are only released when the AI Verification Agent confirms the milestone criteria have been met—no manual intervention required.
+
+### 4. Profile Factor Index (PFI)
+A reputation node for engineers. AI matches the best talent based on technical vision compatibility and project complexity history.
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Backend / Core API**: Django + Django REST Framework 
-- **AI Microservice**: Flask
-- **Database**: SQLite (built-in)
-- **Frontend**: HTML5, Tailwind CSS, Vanilla JS
-- **HTTP Client**: Requests (for inter-service communication)
+- **Frontend**: HTML5, Tailwind CSS (High-Fidelity Premium UI), Vanilla JS.
+- **Backend**: Django & Django REST Framework (Core Engine).
+- **AI Microservice**: Flask (Agentic Intelligence).
+- **Agents**: Custom NLP logic for deconstruction, verification, and reputation scoring.
+- **Database**: PostgreSQL/SQLite (Neural Storage).
 
 ---
 
-## 📂 Project Structure
+## 🚀 Quick Start (Hackathon Ready)
 
-```text
-AI-Freelancing/
-│
-├── backend/            # Django Settings, URLs, and UI views
-│   ├── templates/      # Glassmorphism HTML templates
-│   └── static/         # Frontend JavaScript & CSS
-│
-├── core_api/           # Django REST App (Models, Serializers, Views)
-│   ├── models.py       # User, Project, Milestone, Submission
-│   ├── views.py        # Logic for escrow, match, and AI triggering
-│   └── serializers.py  # DRF Data transformation
-│
-├── ai_services/
-│   └── flask_app/      # Flask AI Microservice
-│       ├── app.py      # Flask routes (port 5001)
-│       └── agents/     # Milestone, Negotiation, PFI, Verification AI logic
-│
-└── manage.py           # Django execution script
-```
-
----
-
-## 💻 How to Run (Local Development)
-
-Because this platform uses a microservice architecture, you must run **both** servers simultaneously.
-
-### 1. Setup the Environment
-```powershell
-# Activate the virtual environment
+### 1. Clone & Setup Backend
+```bash
+# Activate Virtual Environment
 .\venv\Scripts\activate
 
-# Install dependencies (if not already done)
+# Install Dependencies
 pip install -r requirements.txt
 
-# Run database migrations
+# Run Migrations
 python manage.py migrate
-```
 
-### 2. Start the Django Server (Terminal 1)
-Serves the core API (port 8000) and the visual frontend.
-```powershell
-.\venv\Scripts\activate
+# Seed Neural Data (Crucial for Demo)
+python seed_db.py
+
+# Start Django Server
 python manage.py runserver
 ```
 
-### 3. Start the Flask AI Server (Terminal 2)
-Handles background AI logic (port 5001).
-```powershell
-.\venv\Scripts\activate
-cd ai_services\flask_app
+### 2. Launch AI Intelligence (Flask)
+```bash
+cd ai_services/flask_app
 python app.py
 ```
 
----
-
-## 🌐 Navigating the Platform
-
-Once both servers are running, open your browser:
-
-- **Landing Page**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-- **Role Selection**: [http://127.0.0.1:8000/login](http://127.0.0.1:8000/login)
-- **Django Admin**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
-
-### API Endpoints (For Testing)
-- `POST /api/register`
-- `POST /api/login`
-- `POST /api/projects` *(Triggers Flask AI Milestone Generation)*
-- `GET /api/milestones/<id>`
-- `GET /api/projects/<id>/match` *(Smart Match)*
-- `POST /api/milestone/submit` *(Triggers Flask Verification + Auto Escrow payment)*
+### 3. Connect & Deploy
+Open `http://127.0.0.1:8000/` and launch the **Client** or **Engineer** Command Centers.
 
 ---
 
-## 📜 License
+## 🧠 Navigation Guide
+- **Client Command Center**: Architect projects, monitor infrastructure, and hire AI-matched nodes.
+- **Engineer Command Center**: Open the Neural Submission Hub to deploy code and receive automated payments.
+- **Lancer Marketplace**: Explore active project nodes indexed by AI.
+- **Neural Hub**: Monitor real-time logs of AI agent activity.
 
-MIT License. Open-sourced for the community.
+---
+
+**Built for the future of decentralized collaboration.**
+*&copy; 2026 TrustLancer AI Core*
