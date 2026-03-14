@@ -10,7 +10,7 @@ from .models import User, Project, Milestone, ProjectApplication, Submission
 from .serializers import (UserSerializer, ProjectSerializer, MilestoneSerializer,
                           ProjectApplicationSerializer, SubmissionSerializer)
 
-FLASK_AI_URL = "http://127.0.0.1:5000/api/ai"
+FLASK_AI_URL = "http://127.0.0.1:5001/ai"
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -86,35 +86,47 @@ class MilestoneSubmitView(generics.CreateAPIView):
         
         # Trigger Flask AI Verification
         try:
-           if ai_resp.status_code == 200:
+            ai_resp = requests.post(f"{FLASK_AI_URL}/verify-milestone", json={
+                "github_link": submission.github_link
+            }, timeout=10)
+
+            if ai_resp.status_code == 200:
                 result = ai_resp.json()
                 score = result.get('quality_score', 0.0)
+                is_copied = result.get('is_plagiarized', False)
+
                 submission.quality_score = score
-                
-                # MAGIC HAPPENS HERE: Auto-Approval & Payment
-                if score >= 80.0:
-                    submission.status = 'Auto-Approved'
-                    
-                    # Freelancer ko paise mil gaye!
-                    freelancer = submission.freelancer
-                    freelancer.wallet_balance += submission.milestone.payment
-                    
-                    # PFI Score badha do (Gamification)
-                    freelancer.pfi_score += 5.0 
+                submission.is_plagiarized = is_copied
+
+                freelancer = submission.freelancer
+
+                if is_copied:
+                    submission.status = 'Rejected - Fraud Detected'
+                    freelancer.pfi_score -= 20.0  # Heavy penalty
                     freelancer.save()
-                    
+                elif score >= 80.0:
+                    submission.status = 'Auto-Approved'
+
+                    # Freelancer ko paise mil gaye!
+                    freelancer.wallet_balance += submission.milestone.payment
+
+                    # PFI Score badha do (Gamification)
+                    freelancer.pfi_score += 5.0
+                    freelancer.save()
+
                     # Milestone update
                     milestone = submission.milestone
                     milestone.status = 'Paid'
                     milestone.save()
                 else:
                     submission.status = 'Needs Revision'
-                    # Kharab code par score kam karo
-                    freelancer = submission.freelancer
                     freelancer.pfi_score -= 2.0
                     freelancer.save()
-                    
+
                 submission.save()
+
+        except requests.RequestException as e:
+            print(f"AI Service Error (Verification): {e}")
 
 # Create your views here.
 class SmartMatchView(APIView):
@@ -126,10 +138,3 @@ class SmartMatchView(APIView):
         data = [{"id": f.id, "username": f.username, "pfi_score": f.pfi_score} for f in top_freelancers]
         return Response({"recommended_freelancers": data})
 
-is_copied = result.get('is_plagiarized', False)
-                submission.is_plagiarized = is_copied
-                
-                if is_copied:
-                    submission.status = 'Rejected - Fraud Detected'
-                    freelancer.pfi_score -= 20.0 # Heavy penalty
-                    freelancer.save()
